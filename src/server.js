@@ -1,7 +1,8 @@
 import express from 'express';
-import passport from 'passport';
+//import passport from 'passport';
 import bodyParser from 'body-parser';
 import mysql from 'mysql';
+import userRouter from './api/user/user.route';
 
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -29,7 +30,6 @@ connection.connect(function(err) {
   });
 });
 
-
 var app = express();
 app.use(bodyParser.urlencoded({
   extended: true,
@@ -38,6 +38,8 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
+// Register all our routes with /api
+app.use('/api/users', userRouter);
 
 app.get('/', function (req, res) {
   res.send('Hello World!');

@@ -8,6 +8,5 @@ Modo de uso:
 
 ```
 npm install
-npm build
 npm start
 ```
