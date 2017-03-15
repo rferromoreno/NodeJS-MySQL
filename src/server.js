@@ -24,7 +24,7 @@ connection.connect(function(err) {
         if (!!error) {
           console.log("Hubo un error al hacer la consulta");
         } else {
-          console.log("La consulta fue exitosa");
+          console.log("La consulta fue exitosa.");
         }
   });
 });
