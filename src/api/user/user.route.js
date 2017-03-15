@@ -35,5 +35,21 @@ export default ({ connection }) => {
       });
   });
 
+    // Create endpoint /add {user:"pepito", pass:"12345"} for POST
+  usersRoute = router.route('/add');
+
+  usersRoute.post(function (req, res) {
+      // ojo con la INYECCION SQL
+      let consulta = `INSERT INTO usuarios (usuario, password) VALUES('${req.body.user}','${req.body.pass}');`;
+      console.log(consulta);
+      connection.query(consulta, function(err, rows, fields) {
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.send(err);
+        }
+      });
+  });
+
   return router;
 }
