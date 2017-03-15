@@ -39,7 +39,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 // Register all our routes with /api
-app.use('/api/users', userRouter);
+app.use('/api/users', userRouter({ connection }));
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
