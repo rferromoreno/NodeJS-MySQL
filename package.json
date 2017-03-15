@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node lib/server.js",
-    "transpile-es2015": "babel src -d lib"
+    "build": "babel src -d lib"
   },
   "author": "rferromoreno",
   "license": "ISC",

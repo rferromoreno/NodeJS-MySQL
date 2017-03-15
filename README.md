@@ -4,7 +4,10 @@ Sample for NodeJS and MySQL connection, with a simple user CRUD API
 
 # Usage
 
+Modo de uso:
+
 ```
 npm install
+npm build
 npm start
 ```
