@@ -1,56 +1,70 @@
 import express from 'express';
-//import User from './user.model';
-import mysql from 'mysql';
 
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  port     : '3306',
-  user     : 'root',
-  password : '1234',
-  database : 'sampledb'
-});
+export default ({ connection }) => {
 
-// Create our Express router
-const router = express.Router();
+  // Create our Express router
+  const router = express.Router();
 
-// Create a new route with the prefix /
-let usersRoute = router.route('/');
-
-// Create endpoint / for GET
-usersRoute.get(function (req, res) {
-  // Use the Beer model to find all users
-    connection.connect(function(err) {
-        if (err) {
-          console.error('error connecting: ' + err.stack);
-          return;
+  // Create a new route with the prefix /
+  let usersRoute = router.route('/');
+  // Create endpoint / for GET
+  usersRoute.get(function (req, res) {
+      connection.query('SELECT id, usuario from usuarios', function(err, rows, fields) {
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.send(err);
         }
-        console.log('connected as id ' + connection.threadId);
-    });
-    connection.query('SELECT * from usuarios', function(err, rows, fields) {
-      if (!err) {
-        res.json(rows);
-      } else {
-        res.send(err);
-      }
-    });
-    connection.end();
-});
+      });
+  });
 
-// Create endpoint /:_id for GET
-usersRoute = router.route('/:_id');
+  // Create endpoint /:_id for GET
+  usersRoute = router.route('/:_id');
+  usersRoute.get(function (req, res) {
+      // ojo con la INYECCION SQL
+      let consulta = `SELECT id, usuario FROM usuarios WHERE id=${req.params._id}`;
+      console.log(consulta);
+      connection.query(consulta, function(err, rows, fields) {
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.send(err);
+        }
+      });
+  });
 
-usersRoute.get(function (req, res) {
-    connection.connect();
-    let consulta = `SELECT * FROM usuarios WHERE id=${req.params._id}`;
-    console.log(consulta);
-    connection.query(consulta, function(err, rows, fields) {
-      if (!err) {
-        res.json(rows);
-      } else {
-        res.send(err);
-      }
-    });
-    connection.end();
-});
+    // Create endpoint /add {user:"pepito", pass:"12345"} for POST
+  usersRoute = router.route('/add');
+  usersRoute.post(function (req, res) {
+      // ojo con la INYECCION SQL
+      let consulta = `INSERT INTO usuarios (usuario, password) VALUES('${req.body.user}','${req.body.pass}');`;
+      console.log(consulta);
+      connection.query(consulta, function(err, rows, fields) {
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.send(err);
+        }
+      });
+  });
 
-module.exports = router;
+    // Create endpoint /delete {id:123} for POST
+  usersRoute = router.route('/delete');
+  usersRoute.post(function (req, res) {
+      // ojo con la INYECCION SQL
+      let consulta = `DELETE FROM usuarios WHERE id=${req.body.id};`;
+      console.log(consulta);
+      connection.query(consulta, function(err, rows, fields) {
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.send(err);
+        }
+      });
+  });
+
+
+
+
+  return router;
+}
