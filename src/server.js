@@ -3,6 +3,10 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mysql from 'mysql';
 import userRouter from './api/user/user.route';
+import loginRouter from './login/login.router';
+import passport from 'passport';
+import {Strategy} from 'passport-local';
+
 
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -31,6 +35,16 @@ connection.connect(function(err) {
 });
 
 var app = express();
+
+// Configure view engine to render EJS templates.
+ 
+app.set('view engine', 'ejs');
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 app.use(bodyParser.urlencoded({
   extended: true,
   limit: '10mb'
@@ -41,9 +55,21 @@ app.use(bodyParser.json());
 // Register all our routes with /api
 app.use('/api/users', userRouter({ connection }));
 
+app.use('/login', loginRouter({passport}));
+
 app.get('/', function (req, res) {
   res.send('Hello World!');
 });
+
+app.get('/profile',
+  require('connect-ensure-login').ensureLoggedIn(),
+  function(req, res){
+    console.log("llegue a profile");
+    res.render('profile');
+  });
+
+
+
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
