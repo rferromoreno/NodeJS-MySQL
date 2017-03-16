@@ -19,7 +19,13 @@ let usersRoute = router.route('/');
 // Create endpoint / for GET
 usersRoute.get(function (req, res) {
   // Use the Beer model to find all users
-    connection.connect();
+    connection.connect(function(err) {
+        if (err) {
+          console.error('error connecting: ' + err.stack);
+          return;
+        }
+        console.log('connected as id ' + connection.threadId);
+    });
     connection.query('SELECT * from usuarios', function(err, rows, fields) {
       if (!err) {
         res.json(rows);

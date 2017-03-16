@@ -28,6 +28,8 @@ connection.connect(function(err) {
           console.log("La consulta fue exitosa.");
         }
   });
+
+  connection.end();
 });
 
 var app = express();
