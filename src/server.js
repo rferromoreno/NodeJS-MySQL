@@ -22,11 +22,11 @@ connection.connect(function(err) {
   // mock para crear admin - 1234
   connection.query("INSERT IGNORE INTO usuarios (usuario, password) VALUES ('admin', '1234')",
     function (error) {
-        if (!!error) {
-          console.log("Hubo un error al hacer la consulta");
-        } else {
-          console.log("La consulta fue exitosa.");
-        }
+    	if (!!error) {
+        console.log("Hubo un error al hacer la consulta");
+    	} else {
+        console.log("La consulta fue exitosa.");
+      }
   });
 });
 
