@@ -52,7 +52,7 @@ app.use(bodyParser.json());
 // Register all our routes with /api
 app.use('/api/users', userRouter({ connection }));
 
-app.use('/login', loginRouter({passport}));
+app.use('/login', loginRouter());
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
