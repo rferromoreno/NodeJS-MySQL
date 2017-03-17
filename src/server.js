@@ -7,7 +7,6 @@ import loginRouter from './login/login.router';
 import passport from 'passport';
 import {Strategy} from 'passport-local';
 
-
 var connection = mysql.createConnection({
   host     : 'localhost',
   port     : '3306',
@@ -40,10 +39,8 @@ var app = express();
  
 app.set('view engine', 'ejs');
 
-
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 app.use(bodyParser.urlencoded({
   extended: true,
@@ -67,9 +64,6 @@ app.get('/profile',
     console.log("llegue a profile");
     res.render('profile');
   });
-
-
-
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
