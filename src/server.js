@@ -1,11 +1,11 @@
 import express from 'express';
-//import passport from 'passport';
 import bodyParser from 'body-parser';
 import mysql from 'mysql';
 import userRouter from './api/user/user.route';
 import loginRouter from './login/login.router';
 import passport from 'passport';
 import {Strategy} from 'passport-local';
+import expressSessions from 'express-session';
 
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -39,15 +39,17 @@ var app = express();
  
 app.set('view engine', 'ejs');
 
-app.use(passport.initialize());
-app.use(passport.session());
-
 app.use(bodyParser.urlencoded({
   extended: true,
   limit: '10mb'
 }));
 
 app.use(bodyParser.json());
+
+//Sessions config
+app.use(expressSessions({ secret: 'keyboard cat' }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Register all our routes with /api
 app.use('/api/users', userRouter({ connection }));
