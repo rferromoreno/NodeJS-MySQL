@@ -2,7 +2,7 @@ import express from 'express';
 import passport from 'passport';
 import {Strategy as LocalStrategy} from 'passport-local';
  
-export default ({ db }) => {
+export default () => {
   // Create our Express router
   let router = express.Router();
   // Create a new route with the prefix /
