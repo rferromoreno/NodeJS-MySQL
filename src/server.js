@@ -90,7 +90,7 @@ app.get('/logout',
   });
 
 app.get('/', function (req, res) {
-  res.send('Hello World!');
+  res.render('home');
 });
 
 app.get('/profile',
