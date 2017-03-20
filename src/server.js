@@ -6,6 +6,32 @@ import loginRouter from './login/login.router';
 import passport from 'passport';
 import {Strategy} from 'passport-local';
 import expressSessions from 'express-session';
+import Sequelize from 'sequelize';
+import UserModel from './api/user/user.model';
+
+
+
+/* This is Sequelize*/
+ console.log(User);
+
+var sequelize = new Sequelize('sampledb', 'root', '1234', {
+  host: 'localhost' ,
+  port: 3306 , 
+  dialect: 'mysql' 
+});
+
+let User=UserModel(sequelize,Sequelize);
+
+
+User
+  .create({ usuario: 'John Doe', password: '1234' })
+  .then(function(user) {
+    console.log(user.get('usuario')); 
+    console.log(user.get('password')); 
+  })
+
+
+
 
 var connection = mysql.createConnection({
   host     : 'localhost',
