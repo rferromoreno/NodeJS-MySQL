@@ -1,8 +1,9 @@
 import express from 'express';
 import passport from 'passport';
 import {Strategy as LocalStrategy} from 'passport-local';
+import encryptPass from '../helpers/encryptPass.helper';
  
-export default () => {
+export default ({ connection }) => {
   // Create our Express router
   let router = express.Router();
   // Create a new route with the prefix /
@@ -13,10 +14,27 @@ export default () => {
   });
 
   passport.use(new LocalStrategy((username, password, done) => {
-    //Aca va la lógica que consulta en la base de datos
-    let user="agustin";
 
-    return done(null, user);
+    let hashedPass = encryptPass(password);
+    let consulta = 'SELECT id, usuario FROM usuarios WHERE  usuario=? AND password=?;';
+
+    connection.query(consulta, [username, hashedPass], (err, rows, fields) => {
+    if (err) {
+      //error
+      return done(err, null); 
+    }
+    //todo bien tengo que ver que rows sea mayor a 0 para saber que existe el usuario y contraseña
+    console.log(rows);
+    
+    if(rows.length) {
+      console.log('Existe el usuario');
+      
+      return done(null,rows[0]); 
+    }
+   
+     return done(null,null); 
+  });
+    
   })); 
 
   passport.serializeUser((user, done) => {
@@ -34,6 +52,10 @@ export default () => {
       console.log(req.session);
       res.redirect('/profile');
   });
+
+  
+
+
   
   return router;
 }

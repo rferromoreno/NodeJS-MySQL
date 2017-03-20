@@ -23,6 +23,7 @@ connection.connect(function(err) {
 
   console.log('connected as id ' + connection.threadId);
   // mock para crear admin - 1234
+  /*
   connection.query("INSERT IGNORE INTO usuarios (usuario, password) VALUES ('admin', '1234')",
     function (error) {
     	if (!!error) {
@@ -30,7 +31,7 @@ connection.connect(function(err) {
     	} else {
         console.log("La consulta fue exitosa.");
       }
-  });
+  });  */
 });
 
 var app = express();
@@ -54,7 +55,13 @@ app.use(passport.session());
 // Register all our routes with /api
 app.use('/api/users', userRouter({ connection }));
 
-app.use('/login', loginRouter());
+app.use('/login', loginRouter({ connection }));
+
+app.get('/logout',
+  function(req, res){
+    req.logout();
+    res.redirect('/');
+  });
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
@@ -63,7 +70,6 @@ app.get('/', function (req, res) {
 app.get('/profile',
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
-    console.log("llegue a profile");
     res.render('profile');
   });
 
