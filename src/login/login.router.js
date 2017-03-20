@@ -50,7 +50,8 @@ export default ({ connection }) => {
     function(req, res) {
       console.log("Estoy por redireccionar");
       console.log(req.session);
-      res.redirect('/profile');
+      res.render('profile',req.session.passport.user);
+      // res.redirect('/profile');
   });
 
   

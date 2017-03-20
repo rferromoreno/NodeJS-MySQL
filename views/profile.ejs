@@ -1,4 +1,4 @@
-<p>
-Hola
-</p>
-<a href="/logout">Log out</a>
+<% if (usuario) { %>
+    <h2><%= usuario %></h2>
+<% } %>
+<p><a href="/logout">Log out</a></p>
